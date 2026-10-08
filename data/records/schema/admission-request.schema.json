@@ -1,0 +1,219 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "pool.turntide.561.group/admission-request",
+  "title": "AdmissionRequest",
+  "description": "Tidepool membership intake, POSTed to /api/admission-request and stored as a dated KV record. The basic form records interest plus an admission-witness claim. When settlementDestinations and ledgerWitness are also present, the record carries the Membership v2 identity resources needed to form an authoritative admit-pool-member request; the authorized receiver still verifies the admission path and stamps admittedAt at execution. Never infer admitted from this record alone.",
+  "type": "object",
+  "required": [
+    "account",
+    "chain",
+    "admissionWitness",
+    "contact"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "account": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 200,
+      "description": "The applicant's proposed internal pool-ledger account id."
+    },
+    "chain": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 100,
+      "description": "The settlement chain or rail the applicant expects to route yield or draws on (e.g. \"base\", \"hive\")."
+    },
+    "contact": {
+      "type": "string",
+      "minLength": 3,
+      "maxLength": 320,
+      "description": "An email address or other contact the pool's admission lot can reach the applicant through."
+    },
+    "admissionWitness": {
+      "description": "Exactly one admission path, per the membership and governance specification's `admissionWitness` kinds.",
+      "oneOf": [
+        {
+          "type": "object",
+          "required": [
+            "kind",
+            "sponsorAccount",
+            "pledgedAmount"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "kind": {
+              "const": "sponsor-vouch"
+            },
+            "sponsorAccount": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 200
+            },
+            "pledgedAmount": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 100,
+              "pattern": "^\\d+(\\.\\d+)?$"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "required": [
+            "kind",
+            "enterpriseId"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "kind": {
+              "const": "enterprise-roster"
+            },
+            "enterpriseId": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 200
+            }
+          }
+        },
+        {
+          "type": "object",
+          "required": [
+            "kind",
+            "discordSubjectHash",
+            "guildId",
+            "roleId",
+            "checkedAt"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "kind": {
+              "const": "turntide-islander-role"
+            },
+            "discordSubjectHash": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 200
+            },
+            "guildId": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 100
+            },
+            "roleId": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 100
+            },
+            "checkedAt": {
+              "type": "string",
+              "format": "date-time"
+            }
+          }
+        }
+      ]
+    },
+    "settlementDestinations": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 2,
+      "description": "Optional Membership v2 settlement resources. Omit at stage one; when present, ledgerWitness must also be present.",
+      "items": {
+        "oneOf": [
+          {
+            "type": "object",
+            "required": [
+              "rail",
+              "address"
+            ],
+            "properties": {
+              "rail": {
+                "const": "base"
+              },
+              "address": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 200
+              }
+            },
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "required": [
+              "rail",
+              "account"
+            ],
+            "properties": {
+              "rail": {
+                "const": "hive"
+              },
+              "account": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 200
+              }
+            },
+            "additionalProperties": false
+          }
+        ]
+      }
+    },
+    "ledgerWitness": {
+      "type": "object",
+      "description": "Optional member-controlled content-addressed second witness. Omit at stage one; when present, settlementDestinations must also be present. A server filesystem path is never accepted.",
+      "required": [
+        "kind",
+        "recordNi",
+        "provider",
+        "subject"
+      ],
+      "properties": {
+        "kind": {
+          "const": "content-addressed-postings"
+        },
+        "recordNi": {
+          "type": "string",
+          "pattern": "^ni:///sha-256;[A-Za-z0-9_-]+$"
+        },
+        "provider": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "subject": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 500
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "required": [
+          "settlementDestinations"
+        ]
+      },
+      "then": {
+        "required": [
+          "ledgerWitness"
+        ]
+      }
+    },
+    {
+      "if": {
+        "required": [
+          "ledgerWitness"
+        ]
+      },
+      "then": {
+        "required": [
+          "settlementDestinations"
+        ]
+      }
+    }
+  ]
+}

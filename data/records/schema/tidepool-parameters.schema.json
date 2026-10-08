@@ -1,0 +1,276 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "pool.turntide.561.group/tidepool-parameters",
+  "title": "TidepoolParameters",
+  "description": "Static configuration for pool.turntide.561.group. Operational roster and closed-cycle disclosure are not parameters and are received separately from pool-service's public disclosure operation.",
+  "type": "object",
+  "required": [
+    "product",
+    "pool",
+    "cycle",
+    "admissionPaths",
+    "tips",
+    "sources"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "product": {
+      "type": "object",
+      "required": [
+        "name",
+        "affiliation",
+        "brand"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string",
+          "const": "Tidepool"
+        },
+        "affiliation": {
+          "type": "string",
+          "const": "Turntide"
+        },
+        "brand": {
+          "type": "string",
+          "const": "Causeway Services"
+        }
+      }
+    },
+    "pool": {
+      "type": "object",
+      "required": [
+        "baseAddress",
+        "chain",
+        "chainId",
+        "standingInstrument",
+        "split",
+        "vaults",
+        "usdc"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "baseAddress": {
+          "description": "The pool's own Base receiving address. Null until a build lot (economic specification, open question 4) records a dedicated pool-controlled address; the site MUST disable the position page's routing action and show this reason while null.",
+          "type": [
+            "string",
+            "null"
+          ],
+          "pattern": "^0x[0-9a-fA-F]{40}$"
+        },
+        "chain": {
+          "type": "string",
+          "const": "base"
+        },
+        "chainId": {
+          "type": "integer",
+          "const": 8453
+        },
+        "standingInstrument": {
+          "type": "string",
+          "minLength": 1
+        },
+        "split": {
+          "type": "object",
+          "required": [
+            "reserve",
+            "float",
+            "distributable",
+            "fixedShareOfDistributable"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "reserve": {
+              "type": "number",
+              "const": 0.2
+            },
+            "float": {
+              "type": "number",
+              "const": 0.3
+            },
+            "distributable": {
+              "type": "number",
+              "const": 0.5
+            },
+            "fixedShareOfDistributable": {
+              "type": "number",
+              "const": 0.5
+            }
+          }
+        },
+        "vaults": {
+          "description": "ERC-4626 vault addresses on Base a member's position page may read. Empty until a build lot names the standing Morpho vault(s) the economic specification's Instrument section recommends.",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "address",
+              "label"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "address": {
+                "type": "string",
+                "pattern": "^0x[0-9a-fA-F]{40}$"
+              },
+              "label": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          }
+        },
+        "usdc": {
+          "description": "The USDC token contract address on Base (Circle's native USDC), used to read a member's USDC balance and compose the routing transfer.",
+          "type": "string",
+          "pattern": "^0x[0-9a-fA-F]{40}$"
+        }
+      }
+    },
+    "cycle": {
+      "type": "object",
+      "required": [
+        "cadence",
+        "quorum"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "cadence": {
+          "type": "string",
+          "const": "monthly"
+        },
+        "quorum": {
+          "type": "integer",
+          "const": 3
+        }
+      }
+    },
+    "admissionPaths": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "sponsor-vouch",
+          "enterprise-roster",
+          "turntide-islander-role"
+        ]
+      },
+      "minItems": 1
+    },
+    "tips": {
+      "description": "The endpoints tips-services-section's own record lists as live or code-ready, as of the last sync (scripts/sync-tip-endpoints.mjs), never hand-typed.",
+      "type": "object",
+      "required": [
+        "recordedAt",
+        "sourceRecord",
+        "endpoints"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "recordedAt": {
+          "type": "string",
+          "format": "date"
+        },
+        "sourceRecord": {
+          "type": "string",
+          "minLength": 1
+        },
+        "endpoints": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "id",
+              "rail",
+              "provider",
+              "receiver",
+              "state",
+              "instructions",
+              "bookingAccount"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "rail": {
+                "type": "string",
+                "minLength": 1
+              },
+              "provider": {
+                "type": "string",
+                "minLength": 1
+              },
+              "receiver": {
+                "type": "string",
+                "minLength": 1
+              },
+              "state": {
+                "type": "string",
+                "enum": [
+                  "live",
+                  "code-ready"
+                ]
+              },
+              "instructions": {
+                "type": "string",
+                "minLength": 1
+              },
+              "bookingAccount": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          }
+        }
+      }
+    },
+    "sources": {
+      "description": "Citations for the two Tidepool specifications every rule on this site is quoted from. No public URL exists for either (they are internal drafts); the site cites them by title, date, and status rather than hosting or re-typing them wholesale.",
+      "type": "array",
+      "minItems": 2,
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "title",
+          "date",
+          "status",
+          "citation"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "enum": [
+              "economics",
+              "governance",
+              "theory-note"
+            ]
+          },
+          "title": {
+            "type": "string",
+            "minLength": 1
+          },
+          "date": {
+            "type": "string",
+            "format": "date"
+          },
+          "status": {
+            "type": "string",
+            "minLength": 1
+          },
+          "citation": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "$schema": {
+      "type": "string",
+      "description": "the schema this parameter file declares"
+    }
+  }
+}

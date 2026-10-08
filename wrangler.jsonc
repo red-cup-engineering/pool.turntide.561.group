@@ -1,0 +1,24 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "tidepool-561-group",
+  "compatibility_date": "2026-09-05",
+  "compatibility_flags": ["nodejs_compat"],
+  "main": "./worker.mjs",
+  "assets": {
+    "directory": "./dist",
+    "binding": "ASSETS",
+    "not_found_handling": "404-page"
+  },
+  "kv_namespaces": [
+    {
+      "binding": "ADMISSION_REQUESTS",
+      "id": "c3608441977d44229b2258323cccede1"
+    }
+  ],
+  "routes": [
+    {
+      "pattern": "pool.turntide.561.group",
+      "custom_domain": true
+    }
+  ]
+}
