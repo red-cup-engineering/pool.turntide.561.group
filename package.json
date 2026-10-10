@@ -1,0 +1,30 @@
+{
+  "name": "@causeway-services/pool.turntide.561.group",
+  "version": "0.3.0",
+  "type": "module",
+  "description": "pool.turntide.561.group -- the public web face of Tidepool, the Turntide directed-yield pool: a parameterization over the pool's own economic and governance specifications and pool-service, never a bespoke daemon.",
+  "scripts": {
+    "import-pool-disclosure": "node scripts/import-pool-disclosure.mjs",
+    "sync-tips": "node scripts/sync-tip-endpoints.mjs",
+    "build": "node build.mjs",
+    "test": "node --test test/*.test.mjs",
+    "check": "for f in build.mjs worker.mjs src/*.mjs scripts/*.mjs; do node --check \"$f\" || exit 1; done",
+    "deploy": "npm run build && wrangler deploy"
+  },
+  "dependencies": {
+    "@red-cup-engineering/javascript-node-services-section": "0.3.0",
+    "@red-cup-engineering/tips-services-section": "0.2.1"
+  },
+  "devDependencies": {
+    "wrangler": "4.123.0"
+  },
+  "engines": {
+    "node": ">=22.18"
+  },
+  "servedProjections": [
+    {
+      "from": "src",
+      "to": "assets"
+    }
+  ]
+}
