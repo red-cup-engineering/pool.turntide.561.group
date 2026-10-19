@@ -26,5 +26,9 @@
       "from": "src",
       "to": "assets"
     }
-  ]
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/causeway-services/pool.turntide.561.group.git"
+  }
 }
