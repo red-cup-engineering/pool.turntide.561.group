@@ -12,8 +12,8 @@
     "deploy": "npm run build && wrangler deploy"
   },
   "dependencies": {
-    "@red-cup-engineering/javascript-node-services-section": "0.3.0",
-    "@red-cup-engineering/tips-services-section": "0.2.1"
+    "@red-cup-engineering/javascript-node-engineering-services-section": "0.3.0",
+    "@red-cup-engineering/tips-engineering-services-section": "0.2.1"
   },
   "devDependencies": {
     "wrangler": "4.123.0"
