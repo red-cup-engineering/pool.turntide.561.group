@@ -6,12 +6,11 @@
 import { createHash } from "node:crypto";
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
-import { fileURLToPath } from "node:url";
 import { parseArgs } from "node:util";
 import { appendReceivedDisclosure, projectPoolServiceDisclosure } from "../src/public-pool-projection.mjs";
+import { PUBLIC_PROJECTION_PATH } from "../src/section-root.mjs";
 
-const ROOT=path.dirname(path.dirname(fileURLToPath(import.meta.url)));
-const DEFAULT_OUTPUT=path.join(ROOT,"data/records/public-pool-projection.json");
+const DEFAULT_OUTPUT=PUBLIC_PROJECTION_PATH;
 
 /**
  * @param {{recordPath:string,operationReceipt:string,recordRef:string,importedAt:string,outputPath?:string}} args

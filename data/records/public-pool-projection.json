@@ -1,6 +1,0 @@
-{
-  "$schema": "./schema/public-pool-projection.schema.json",
-  "type": "TidepoolPublicProjection",
-  "state": "unreceived",
-  "disclosures": []
-}

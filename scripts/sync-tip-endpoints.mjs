@@ -7,14 +7,12 @@
  * this script reads, so a wallet the Group holds no verified key for can never reach this site.
  */
 import { readFileSync, writeFileSync } from "node:fs";
-import { dirname, join } from "node:path";
-import { fileURLToPath } from "node:url";
 import { deriveTipsPage } from "@red-cup-engineering/tips-services-section/derive-tips-page";
 import { loadEndpoints } from "@red-cup-engineering/tips-services-section";
 import { runJavascriptNodeOperation } from "@red-cup-engineering/javascript-node-services-section/operation";
+import { PARAMETERS_PATH } from "../src/section-root.mjs";
 
-const ROOT = dirname(dirname(fileURLToPath(import.meta.url)));
-const PARAMS_PATH = join(ROOT, "tidepool.json");
+const PARAMS_PATH = PARAMETERS_PATH;
 
 function instructionsFor(endpoint) {
   if (endpoint.rail === "hive") return `Send a${endpoint.provider.includes("HBD") ? "n HBD" : " HIVE"} transfer to @${endpoint.receiver} on the Hive blockchain. Any memo is welcome but not required.`;
