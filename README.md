@@ -1,3 +1,5 @@
+Received 2026-10-24 from causeway-services/pool.turntide.561.group@b64b94d8026e56db9a827cfaa8d64e3afa1b8154
+
 # pool.turntide.561.group
 
 <!-- 561-group-standards:badges:start -->
@@ -9,6 +11,17 @@
 
 The public web face of Tidepool, the Turntide directed-yield pool. Run by
 Causeway Services.
+
+## Parameters live in the section
+
+Since 2026-10-24 this repository holds only the application (build, Worker, client scripts, tests). The data that parameterizes it is Public data and lives in [causeway-services/public-tidepool-services-section](https://github.com/causeway-services/public-tidepool-services-section): `tidepool.json`, `data/records/public-pool-projection.json`, `data/records/schema/*.schema.json`, the parameter snapshot and the witness logs, together with the specifications and governance records the build already read from there.
+
+The build, the scripts and the tests find the section through `src/section-root.mjs`: `TIDEPOOL_SECTION_ROOT=/path/to/public-tidepool-services-section`, or, unset, `../..` (this repository mounted at `<section>/sites/pool.turntide.561.group`, the monorepo layout). Everywhere below, `tidepool.json` and `data/records/...` mean those files in the section.
+
+```sh
+git clone https://github.com/causeway-services/public-tidepool-services-section.git section
+TIDEPOOL_SECTION_ROOT=$PWD/section npm run build
+```
 
 ## What this site is
 

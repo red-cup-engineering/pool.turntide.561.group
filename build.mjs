@@ -13,12 +13,11 @@ import { deriveTipsPage } from "@red-cup-engineering/tips-services-section/deriv
 import { specQuote, verifyAllSpecQuotes } from "./src/spec-quotes.mjs";
 import { validatePublicPoolProjection } from "./src/public-pool-projection.mjs";
 import { pageShell, quoteBlock, emptyState, escapeHtml, renderTidepoolForm } from "./src/render.mjs";
+import { SECTION_ROOT as TURNTIDE_ROOT, PARAMETERS_PATH, PUBLIC_PROJECTION_PATH } from "./src/section-root.mjs";
 
 const ROOT = path.dirname(fileURLToPath(import.meta.url));
 const DIST = path.join(ROOT, "dist");
 const ORIGIN = "https://pool.turntide.561.group";
-const PUBLIC_PROJECTION_PATH = path.join(ROOT, "data", "records", "public-pool-projection.json");
-const TURNTIDE_ROOT = path.resolve(ROOT, "../..");
 const PARTICIPANT_GOVERNANCE_PATH = path.join(TURNTIDE_ROOT, "data", "records", "governance", "tidepool-participant-governance.json");
 const TIDEPOOL_STATUS_PATH = path.join(TURNTIDE_ROOT, "data", "records", "governance", "tidepool-civic-status.json");
 
@@ -383,7 +382,7 @@ async function writePage(relDir, html) {
 
 /** Runs the whole build: verifies quotes, renders every page, writes `dist/`. */
 async function build() {
-  const params = JSON.parse(await readFile(path.join(ROOT, "tidepool.json"), "utf8"));
+  const params = JSON.parse(await readFile(PARAMETERS_PATH, "utf8"));
   const publicProjection = JSON.parse(await readFile(PUBLIC_PROJECTION_PATH, "utf8"));
   const participantGovernance = JSON.parse(await readFile(PARTICIPANT_GOVERNANCE_PATH, "utf8"));
   const tidepoolStatus = JSON.parse(await readFile(TIDEPOOL_STATUS_PATH, "utf8"));

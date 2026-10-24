@@ -5,6 +5,7 @@ import { test } from "node:test";
 import { fileURLToPath } from "node:url";
 import { deriveTipsPage } from "@red-cup-engineering/tips-services-section/derive-tips-page";
 import { build, cyclesPage } from "../build.mjs";
+import { PARAMETERS_PATH, PUBLIC_PROJECTION_PATH } from "../src/section-root.mjs";
 
 const ROOT = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
 const DIST = path.join(ROOT, "dist");
@@ -24,14 +25,14 @@ test("build() renders every page from the parameter file, verified against a fre
 });
 
 test("the home page states the product name and affiliation from tidepool.json, not a hardcoded string", async () => {
-  const params = JSON.parse(await readFile(path.join(ROOT, "tidepool.json"), "utf8"));
+  const params = JSON.parse(await readFile(PARAMETERS_PATH, "utf8"));
   const html = await readFile(path.join(DIST, "index.html"), "utf8");
   assert.match(html, new RegExp(params.product.name, "u"));
   assert.match(html, new RegExp(params.product.affiliation, "u"));
 });
 
 test("member and cycle pages fail closed when no pool-service public disclosure has been received", async () => {
-  const projection = JSON.parse(await readFile(path.join(ROOT, "data", "records", "public-pool-projection.json"), "utf8"));
+  const projection = JSON.parse(await readFile(PUBLIC_PROJECTION_PATH, "utf8"));
   assert.equal(projection.state, "unreceived");
   assert.deepEqual(projection.disclosures, []);
   const cycles = await readFile(path.join(DIST, "cycles", "index.html"), "utf8");
@@ -43,7 +44,7 @@ test("member and cycle pages fail closed when no pool-service public disclosure 
 });
 
 test("the position page follows pool.baseAddress: disabled with the reason when null, enabled with the address when set", async () => {
-  const params = JSON.parse(await readFile(path.join(ROOT, "tidepool.json"), "utf8"));
+  const params = JSON.parse(await readFile(PARAMETERS_PATH, "utf8"));
   const html = await readFile(path.join(DIST, "position", "index.html"), "utf8");
   if (params.pool.baseAddress === null) {
     assert.match(html, /id="route-yield" type="button" disabled/u);
@@ -107,7 +108,7 @@ test("the admission request uses TUFTE’s native form model with constraints an
 
 
 test("cycles page renders authoritative quorum/fallback state from received disclosure", async () => {
-  const params = JSON.parse(await readFile(path.join(ROOT, "tidepool.json"), "utf8"));
+  const params = JSON.parse(await readFile(PARAMETERS_PATH, "utf8"));
   const sourcesById = Object.fromEntries(params.sources.map((source) => [source.id, source]));
   const projection = {
     $schema: "./schema/public-pool-projection.schema.json",
