@@ -51,7 +51,7 @@ pool has none.
   reconciliation upstream. Exact decimal strings remain strings; the website
   never re-computes financial amounts.
 - `scripts/sync-tip-endpoints.mjs` — refreshes `tidepool.json`'s `tips` field
-  from `@red-cup-engineering/tips-services-section`'s own live/code-ready
+  from `@red-cup-engineering/tips-engineering-services-section`'s own live/code-ready
   endpoints. Never hand-edit that field.
 - `src/spec-quotes.mjs` — every quoted rule plus the verification that proves
   each is a real substring of its cited specification.
